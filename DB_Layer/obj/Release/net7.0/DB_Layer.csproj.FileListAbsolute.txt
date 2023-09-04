@@ -1,0 +1,14 @@
+C:\Users\johny\source\repos\SPOC_Orders\DB_Layer\bin\Release\net7.0\DB_Layer.deps.json
+C:\Users\johny\source\repos\SPOC_Orders\DB_Layer\bin\Release\net7.0\DB_Layer.runtimeconfig.json
+C:\Users\johny\source\repos\SPOC_Orders\DB_Layer\bin\Release\net7.0\DB_Layer.dll
+C:\Users\johny\source\repos\SPOC_Orders\DB_Layer\bin\Release\net7.0\DB_Layer.pdb
+C:\Users\johny\source\repos\SPOC_Orders\DB_Layer\obj\Release\net7.0\DB_Layer.csproj.AssemblyReference.cache
+C:\Users\johny\source\repos\SPOC_Orders\DB_Layer\obj\Release\net7.0\DB_Layer.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\johny\source\repos\SPOC_Orders\DB_Layer\obj\Release\net7.0\DB_Layer.AssemblyInfoInputs.cache
+C:\Users\johny\source\repos\SPOC_Orders\DB_Layer\obj\Release\net7.0\DB_Layer.AssemblyInfo.cs
+C:\Users\johny\source\repos\SPOC_Orders\DB_Layer\obj\Release\net7.0\DB_Layer.csproj.CoreCompileInputs.cache
+C:\Users\johny\source\repos\SPOC_Orders\DB_Layer\obj\Release\net7.0\DB_Layer.dll
+C:\Users\johny\source\repos\SPOC_Orders\DB_Layer\obj\Release\net7.0\refint\DB_Layer.dll
+C:\Users\johny\source\repos\SPOC_Orders\DB_Layer\obj\Release\net7.0\DB_Layer.pdb
+C:\Users\johny\source\repos\SPOC_Orders\DB_Layer\obj\Release\net7.0\DB_Layer.genruntimeconfig.cache
+C:\Users\johny\source\repos\SPOC_Orders\DB_Layer\obj\Release\net7.0\ref\DB_Layer.dll

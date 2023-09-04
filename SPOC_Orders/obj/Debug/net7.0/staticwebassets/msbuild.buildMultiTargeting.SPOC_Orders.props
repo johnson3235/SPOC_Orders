@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\SPOC_Orders.props" />
+</Project>

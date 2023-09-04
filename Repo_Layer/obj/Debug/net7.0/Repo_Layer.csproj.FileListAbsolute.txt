@@ -1,0 +1,15 @@
+C:\Users\johny\source\repos\SPOC_Orders\Repo_Layer\obj\Debug\net7.0\Repo_Layer.csproj.AssemblyReference.cache
+C:\Users\johny\source\repos\SPOC_Orders\Repo_Layer\obj\Debug\net7.0\Repo_Layer.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\johny\source\repos\SPOC_Orders\Repo_Layer\obj\Debug\net7.0\Repo_Layer.AssemblyInfoInputs.cache
+C:\Users\johny\source\repos\SPOC_Orders\Repo_Layer\obj\Debug\net7.0\Repo_Layer.AssemblyInfo.cs
+C:\Users\johny\source\repos\SPOC_Orders\Repo_Layer\obj\Debug\net7.0\Repo_Layer.csproj.CoreCompileInputs.cache
+C:\Users\johny\source\repos\SPOC_Orders\Repo_Layer\bin\Debug\net7.0\Repo_Layer.deps.json
+C:\Users\johny\source\repos\SPOC_Orders\Repo_Layer\bin\Debug\net7.0\Repo_Layer.dll
+C:\Users\johny\source\repos\SPOC_Orders\Repo_Layer\bin\Debug\net7.0\Repo_Layer.pdb
+C:\Users\johny\source\repos\SPOC_Orders\Repo_Layer\bin\Debug\net7.0\DB_Layer.dll
+C:\Users\johny\source\repos\SPOC_Orders\Repo_Layer\bin\Debug\net7.0\DB_Layer.pdb
+C:\Users\johny\source\repos\SPOC_Orders\Repo_Layer\obj\Debug\net7.0\Repo_Layer.csproj.CopyComplete
+C:\Users\johny\source\repos\SPOC_Orders\Repo_Layer\obj\Debug\net7.0\Repo_Layer.dll
+C:\Users\johny\source\repos\SPOC_Orders\Repo_Layer\obj\Debug\net7.0\refint\Repo_Layer.dll
+C:\Users\johny\source\repos\SPOC_Orders\Repo_Layer\obj\Debug\net7.0\Repo_Layer.pdb
+C:\Users\johny\source\repos\SPOC_Orders\Repo_Layer\obj\Debug\net7.0\ref\Repo_Layer.dll
