@@ -110,7 +110,7 @@ namespace SPOC_Orders.Controllers
         [HttpPost("o2login")]
         public async Task<IActionResult> Login(LoginDTO  data)
         {
-           var token =  Login_Services.AcquireATokenFromUsernamePasswordAsync(data.userName, data.Password);
+           var token = await Login_Services.AcquireATokenFromUsernamePasswordAsync(data.userName, data.Password);
             return Ok(token);
         }
 
