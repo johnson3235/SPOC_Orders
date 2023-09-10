@@ -209,6 +209,10 @@
               "target": "Package",
               "version": "[12.0.1, )"
             },
+            "MailKit": {
+              "target": "Package",
+              "version": "[4.2.0, )"
+            },
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
               "version": "[7.0.10, )"
@@ -226,6 +230,18 @@
               "suppressParent": "All",
               "target": "Package",
               "version": "[7.0.10, )"
+            },
+            "MimeKit": {
+              "target": "Package",
+              "version": "[4.2.0, )"
+            },
+            "NETCore.MailKit": {
+              "target": "Package",
+              "version": "[2.1.0, )"
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.3, )"
             },
             "System.ComponentModel.Annotations": {
               "target": "Package",

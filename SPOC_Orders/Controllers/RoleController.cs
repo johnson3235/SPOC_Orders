@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Services_Layer.DTOS.Distributor;
 using Services_Layer.DTOS.Products;
+using Services_Layer.Response_Model;
 using Services_Layer.Services.Distributor_Services;
 using Services_Layer.Services.Role_Services;
 
@@ -20,20 +21,20 @@ namespace SPOC_Orders.Controllers
 
         [HttpGet]
         //[Authorize]
-        public ActionResult<List<Role>> GetRoles()
+        public ActionResult<GenericResponse<List<Role>>> GetRoles()
         {
-            List<Role> con_list = Role_services.GetRoles();
-
+            GenericResponse<List<Role>> con_list = Role_services.GetRoles();
+           
             return Ok(con_list);
         }
 
 
         [HttpGet("{id:int}")]
         // [Authorize]
-        public ActionResult<Role> GetByID(int id)
+        public ActionResult<GenericResponse<Role?>> GetByID(int id)
         {
-            Role con = Role_services.GetByID(id);
-            if (con != null)
+            GenericResponse<Role?> con = Role_services.GetByID(id);
+            if (con.Data != null)
             {
                 return Ok(con);
             }
@@ -50,7 +51,7 @@ namespace SPOC_Orders.Controllers
 
             return CreatedAtAction(
                 "GetByID",
-                new { id = con2.Id }
+                new { id = con2.Data.Id }
                 , con);
         }
 
@@ -61,10 +62,10 @@ namespace SPOC_Orders.Controllers
         public IActionResult Update(int id, UpdateRoleDTO NewRole)
         {
 
-                bool complete = Role_services.Update(id, NewRole);
-                if (complete == true)
+                var complete = Role_services.Update(id, NewRole);
+                if (complete.Data == true)
                 {
-                    return Ok();
+                    return Ok(complete);
                 }
                 else
                 {
@@ -78,10 +79,10 @@ namespace SPOC_Orders.Controllers
         public IActionResult Remove(int ID)
         {
 
-            bool complete = Role_services.Remove(ID);
-            if (complete == true)
+            var complete = Role_services.Remove(ID);
+            if (complete.Data == true)
             {
-                return NoContent();
+                return Ok(complete);
             }
             else
             {

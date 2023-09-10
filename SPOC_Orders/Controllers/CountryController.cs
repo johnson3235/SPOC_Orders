@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Repo_Layer.Repositry;
 using Services_Layer.Services.Country_Services;
+using Services_Layer.Response_Model;
 
 namespace SPOC_Orders.Controllers
 {
@@ -23,9 +24,9 @@ namespace SPOC_Orders.Controllers
 
         [HttpGet]
         //[Authorize]
-        public ActionResult<List<Country>> GetCountires()
+        public ActionResult<GenericResponse<List<Country>>> GetCountires()
         {
-            List<Country> con_list = country_services.GetCountries();
+            var con_list = country_services.GetCountries();
 
             return Ok(con_list);
         }
@@ -33,10 +34,10 @@ namespace SPOC_Orders.Controllers
 
         [HttpGet("{id:int}")]
        // [Authorize]
-        public ActionResult<Country> GetByID(int id)
+        public ActionResult<GenericResponse<Country>> GetByID(int id)
         {
-            Country con = country_services.GetByID(id);
-            if (con != null)
+            var con = country_services.GetByID(id);
+            if (con.Data != null)
             {
                 return Ok(con);
             }
@@ -53,7 +54,7 @@ namespace SPOC_Orders.Controllers
             
             return CreatedAtAction(
                 "GetByID",
-                new { id = con2.Id }
+                new { id = con2.Data.Id }
                 , con);
         }
 
@@ -65,8 +66,8 @@ namespace SPOC_Orders.Controllers
         {
 
 
-            bool complete = country_services.Update(id, NewCountry);
-            if (complete == true)
+            var complete = country_services.Update(id, NewCountry);
+            if (complete.Data == true)
             {
                 return Ok();
             }
@@ -81,8 +82,8 @@ namespace SPOC_Orders.Controllers
         public IActionResult Remove(int ID)
         {
 
-            bool complete = country_services.Remove(ID);
-            if (complete == true)
+            var complete = country_services.Remove(ID);
+            if (complete.Data == true)
             {
                 return NoContent();
             }

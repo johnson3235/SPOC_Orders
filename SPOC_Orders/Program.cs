@@ -22,6 +22,10 @@ using Services_Layer.Services.Order_Services;
 using Repo_Layer.Repositry.Order_Repo;
 using Services_Layer.Services.User_Services;
 using System.Net;
+using Services_Layer.Services.Email_Services;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Identity.Web;
+using Services_Layer.Services.MicrosoftGraphHelper;
 
 namespace Web_api_task
 {
@@ -94,29 +98,29 @@ new string[] {}
                 ).AddEntityFrameworkStores<DataDbContext>()
                 .AddDefaultTokenProviders();
 
-            builder.Services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme =
-                    JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme =
-                    JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultScheme =
-                    JwtBearerDefaults.AuthenticationScheme;
+            //builder.Services.AddAuthentication(options =>
+            //{
+            //    options.DefaultAuthenticateScheme =
+            //        JwtBearerDefaults.AuthenticationScheme;
+            //    options.DefaultChallengeScheme =
+            //        JwtBearerDefaults.AuthenticationScheme;
+            //    options.DefaultScheme =
+            //        JwtBearerDefaults.AuthenticationScheme;
 
-            }).AddJwtBearer(options =>
-            {
-                options.SaveToken = true;
-                options.RequireHttpsMetadata = false;
-                options.TokenValidationParameters = new TokenValidationParameters()
-                {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidIssuer = builder.Configuration["JWT:Issues"],
-                    ValidAudience = builder.Configuration["JWT:Audiance"],
-                    IssuerSigningKey = new SymmetricSecurityKey
-                        (Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]))
-                };
-            });
+            //}).AddJwtBearer(options =>
+            //{
+            //    options.SaveToken = true;
+            //    options.RequireHttpsMetadata = false;
+            //    options.TokenValidationParameters = new TokenValidationParameters()
+            //    {
+            //        ValidateIssuer = true,
+            //        ValidateAudience = true,
+            //        ValidIssuer = builder.Configuration["JWT:Issues"],
+            //        ValidAudience = builder.Configuration["JWT:Audiance"],
+            //        IssuerSigningKey = new SymmetricSecurityKey
+            //            (Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]))
+            //    };
+            //});
 
             // Repositries
             builder.Services.AddScoped<IRepository<Country>, Repository<Country>>();
@@ -139,10 +143,23 @@ new string[] {}
             builder.Services.AddScoped<IBranchServices, BranchServices>();
             builder.Services.AddScoped<IOrderServices, OrderServices>();
             builder.Services.AddScoped<IUserServices, UserServices>();
+            builder.Services.AddScoped<IMailService, MailService>();
+            builder.Services.AddScoped<IMicrosoftGraphHelper, MicrosoftGraphHelper>();
             
 
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder =>
+                {
+                    builder.AllowAnyOrigin()
+                           .AllowAnyMethod()
+                           .AllowAnyHeader();
+                });
+            });
 
+            builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
+            builder.Services.AddMicrosoftIdentityWebApiAuthentication(builder.Configuration);
 
 
 
@@ -161,8 +178,7 @@ new string[] {}
 
             app.UseRouting();
 
-           // app.UseCors("mypolicy");
-
+            app.UseCors();
             app.UseAuthentication();
 
             app.UseAuthorization();

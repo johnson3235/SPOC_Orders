@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Repo_Layer.Repositry;
 using Services_Layer.Services.Pharmacy_Services;
 using Services_Layer.Services.Product_Services;
+using Services_Layer.Response_Model;
 
 namespace SPOC_Orders.Controllers
 {
@@ -22,7 +23,7 @@ namespace SPOC_Orders.Controllers
 
         [HttpGet]
         //[Authorize]
-        public ActionResult<List<GetPharmciesWithCountry>> GetPharmacies()
+        public ActionResult<GenericResponse<List<Pharmacy>>> GetPharmacies()
         {
             var phr_list = pharmacy_services.GetPharmacies();
             return Ok(phr_list);
@@ -31,11 +32,11 @@ namespace SPOC_Orders.Controllers
 
         [HttpGet("{id:int}")]
      //   [Authorize]
-        public ActionResult<GetPharmciesWithCountry> GetByID(int id)
+        public ActionResult<GenericResponse<Pharmacy>> GetByID(int id)
         {
-            GetPharmciesWithCountry phar = pharmacy_services.GetByID(id);
+            var phar = pharmacy_services.GetByID(id);
            
-            if (phar != null)
+            if (phar.Data != null)
             {
                 return Ok(phar);
             }
@@ -47,9 +48,9 @@ namespace SPOC_Orders.Controllers
 
         [HttpGet("FillterByCountry/{Country_id:int}")]
         //   [Authorize]
-        public ActionResult<List<GetPharmciesWithCountry>> GetByCountry(int Country_id)
+        public ActionResult<GenericResponse<List<Pharmacy>>> GetByCountry(int Country_id)
         {
-            List<GetPharmciesWithCountry> phar_list = pharmacy_services.GetByCountry(Country_id);
+            var phar_list = pharmacy_services.GetByCountry(Country_id);
             return Ok(phar_list);
 
         }
@@ -59,8 +60,8 @@ namespace SPOC_Orders.Controllers
         public IActionResult Add(AddPharmacyDTO pharmacy)
         {
 
-           Pharmacy New_Pharmacy = pharmacy_services.Add(pharmacy);
-          if(New_Pharmacy != null)
+           var New_Pharmacy = pharmacy_services.Add(pharmacy);
+          if(New_Pharmacy.Data != null)
             {
                 // return CreatedAtAction(
                 //"GetByID",
@@ -80,8 +81,8 @@ namespace SPOC_Orders.Controllers
         public IActionResult Update(int id, UpdatePharmacyDTO pharmacy)
         {
 
-            bool complete = pharmacy_services.Update(id, pharmacy);
-            if (complete)
+            var complete = pharmacy_services.Update(id, pharmacy);
+            if (complete.Data)
             {
                 return Ok();
             }
@@ -96,8 +97,8 @@ namespace SPOC_Orders.Controllers
         //[Authorize]
         public IActionResult Remove(int ID)
         {
-           bool complete = pharmacy_services.Remove(ID);
-            if(complete)
+           var complete = pharmacy_services.Remove(ID);
+            if(complete.Data)
             {
                 return NoContent();
             }

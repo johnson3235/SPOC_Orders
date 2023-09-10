@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Services_Layer.DTOS.Branches;
 using Services_Layer.DTOS.Orders;
 using Services_Layer.DTOS.Pharmacies;
+using Services_Layer.Response_Model;
 using Services_Layer.Services.Branch_Services;
 using Services_Layer.Services.Order_Services;
 
@@ -21,7 +22,7 @@ namespace SPOC_Orders.Controllers
 
         [HttpGet]
         //[Authorize]
-        public ActionResult<List<GetOrderDTO>> GetOrders()
+        public ActionResult<GenericResponse<List<GetOrderDTO>>> GetOrders()
         {
             var phr_list = Order_services.GetOrders();
             return Ok(phr_list);
@@ -30,11 +31,11 @@ namespace SPOC_Orders.Controllers
 
         [HttpGet("{id:int}")]
         //   [Authorize]
-        public ActionResult<GetOrderDTO> GetByID(int id)
+        public ActionResult<GenericResponse<GetOrderDTO>> GetByID(int id)
         {
-            GetOrderDTO phar = Order_services.GetByID(id);
+            var phar = Order_services.GetByID(id);
 
-            if (phar != null)
+            if (phar.Data != null)
             {
                 return Ok(phar);
             }
@@ -58,8 +59,8 @@ namespace SPOC_Orders.Controllers
         public async Task<IActionResult> Add(AddOrderDTO order)
         {
 
-            Order New_Order = await Order_services.Add(order);
-            if (New_Order != null)
+            var New_Order = await Order_services.Add(order);
+            if (New_Order.Data != null)
             {
                 // return CreatedAtAction(
                 //"GetByID",
@@ -79,9 +80,9 @@ namespace SPOC_Orders.Controllers
         public async Task<IActionResult> Update(int id, UpdateOrderDTO order)
         {
 
-           bool complete = await Order_services.Update(id, order);
+           var complete = await Order_services.Update(id, order);
          
-            if (complete)
+            if (complete.Data)
             {
                 return Ok();
             }
@@ -96,8 +97,8 @@ namespace SPOC_Orders.Controllers
         //[Authorize]
         public IActionResult Remove(int ID)
         {
-            bool complete = Order_services.Remove(ID);
-            if (complete)
+            var complete = Order_services.Remove(ID);
+            if (complete.Data)
             {
                 return NoContent();
             }

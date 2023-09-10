@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Repo_Layer.Repositry;
 using Repo_Layer.UnitOfWork;
 using Services_Layer.DTOS.Pharmacies;
+using Services_Layer.Response_Model;
 using Services_Layer.Services.Product_Services;
 using System;
 using System.Collections.Generic;
@@ -26,21 +27,22 @@ namespace Services_Layer.Services.Pharmacy_Services
 
 
 
-        public List<GetPharmciesWithCountry> GetPharmacies()
+        public GenericResponse<List<GetPharmciesWithCountry>> GetPharmacies()
         {
             List<Pharmacy> phr_list = _unitOfWork.Pharmacy_Repo.GetAll("Country");
             List<GetPharmciesWithCountry> pharmacyDtos = new List<GetPharmciesWithCountry>();
+            
             foreach (var phr in phr_list)
             {
                 pharmacyDtos.Add(_mapper.Map<GetPharmciesWithCountry>(phr));
             }
-          
-            return pharmacyDtos;
+            var response = new  GenericResponse < List < GetPharmciesWithCountry>>(){ Data= pharmacyDtos , Message = "Get Pharmacies Successfully" };
+            return response;
         }
 
 
 
-        public GetPharmciesWithCountry? GetByID(int id)
+        public GenericResponse<GetPharmciesWithCountry?> GetByID(int id)
         {
             Pharmacy phar = _unitOfWork.Pharmacy_Repo.Get(id);
             
@@ -53,15 +55,18 @@ namespace Services_Layer.Services.Pharmacy_Services
                 }
 
                 GetPharmciesWithCountry DTO_Pharmacy = _mapper.Map<GetPharmciesWithCountry>(phar);
-                return DTO_Pharmacy;
+                var response = new GenericResponse<GetPharmciesWithCountry?>() { Data = DTO_Pharmacy, Message = "Get Pharmacies Successfully" };
+                return response;
             }
             else
-            { return null; }
+            {
+                var response = new GenericResponse<GetPharmciesWithCountry?>() { Data = null, Message = "Get Pharmacies Failed" };
+                return response; }
 
         }
 
 
-        public List<GetPharmciesWithCountry> GetByCountry(int Country_id)
+        public GenericResponse<List<GetPharmciesWithCountry>> GetByCountry(int Country_id)
         {
             List<Pharmacy> phar_list = _unitOfWork.Pharmacy_Repo.FillterByCountry(Country_id);
 
@@ -70,13 +75,13 @@ namespace Services_Layer.Services.Pharmacy_Services
             {
                 pharmacyDtos.Add(_mapper.Map<GetPharmciesWithCountry>(phr));
             }
-
-            return pharmacyDtos;
+            var response = new GenericResponse<List<GetPharmciesWithCountry>>() { Data = pharmacyDtos, Message = "Get Pharmacies By Country Successfully" };
+            return response;
 
         }
 
 
-        public Pharmacy? Add(AddPharmacyDTO pharmacy)
+        public GenericResponse<Pharmacy?> Add(AddPharmacyDTO pharmacy)
         {
             Pharmacy New_Pharmacy = _mapper.Map<Pharmacy>(pharmacy);
 
@@ -87,23 +92,23 @@ namespace Services_Layer.Services.Pharmacy_Services
 
                 if (savedChanges > 0)
                 {
-                    return New_Pharmacy;
+                    return new GenericResponse<Pharmacy?>() { Data = New_Pharmacy, Message = "Added Pharmacy Successfully" }; 
                 }
                 else
                 {
-                    return null;
+                    return new GenericResponse<Pharmacy?>() { Data = null, Message = "Added Pharmacy Failed" };
                 }
             }
             catch (Exception ex)
             {
-                return null;
+                return new GenericResponse<Pharmacy?>() { Data = null, Message = "Added Pharmacy Failed Exception" }; 
             }
 
         }
            
 
 
-        public bool Update(int id, UpdatePharmacyDTO pharmacy)
+        public GenericResponse<bool> Update(int id, UpdatePharmacyDTO pharmacy)
         {
             Pharmacy New_Pharmacy = _mapper.Map<Pharmacy>(pharmacy);
 
@@ -111,31 +116,32 @@ namespace Services_Layer.Services.Pharmacy_Services
             {
                 _unitOfWork.Pharmacy_Repo.Update(New_Pharmacy);
                 _unitOfWork.Save();
-                return true;
+                var res = new GenericResponse<bool>() { Message = "Update Pharmacy Successfully", Data = true };
+                return res;
+
             }
-            return false;
+            var response = new GenericResponse<bool>() { Message = "Update Pharmacy Failed", Data = false };
+            return response;
         }
 
 
-        public bool Remove(int ID)
+        public GenericResponse<bool> Remove(int ID)
         {
             var pro = _unitOfWork.Pharmacy_Repo.Get(ID);
             if (pro != null)
             {
                 _unitOfWork.Pharmacy_Repo.Delete(ID);
                 _unitOfWork.Save();
-                return true;
+                var res = new GenericResponse<bool>() { Message = "Deleted Pharmacy Successfully", Data = true };
+                return res;
+
             }
-            return false;
-
+            var response = new GenericResponse<bool>() { Message = "Delete Pharmacy Failed", Data = false };
+            return response;
         }
 
 
-        public bool DoesCountryExist(int countryId)
-        {
-            var country = _unitOfWork.Country_Repo.Get(countryId); // Replace with your actual repository method
-            return country != null;
-        }
+
 
     }
 }

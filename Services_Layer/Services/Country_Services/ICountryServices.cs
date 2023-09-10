@@ -1,6 +1,7 @@
 ﻿using DB_Layer.Models;
 using Services_Layer.DTOS.Pharmacies;
 using Services_Layer.DTOS.Products;
+using Services_Layer.Response_Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,20 +12,21 @@ namespace Services_Layer.Services.Country_Services
 {
     public interface ICountryServices
     {
-
-        public List<Country> GetCountries();
-
+        public GenericResponse<List<Country>> GetCountries();
 
 
-        public Country? GetByID(int id);
+        public GenericResponse<Country?> GetByID(int id);
 
 
-        public Country Add(CountryDTO con);
+
+        public GenericResponse<Country?> Add(CountryDTO Country);
 
 
-        public bool Update(int id, UpdateCountryDTO Country);
+
+        public GenericResponse<bool> Update(int id, UpdateCountryDTO Country);
 
 
-        public bool Remove(int ID);
+        public GenericResponse<bool> Remove(int ID);
+
     }
 }

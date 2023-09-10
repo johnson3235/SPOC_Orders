@@ -6,6 +6,7 @@ using Repo_Layer.UnitOfWork;
 using Services_Layer.DTOS.Distributor;
 using Services_Layer.DTOS.Pharmacies;
 using Services_Layer.DTOS.Products;
+using Services_Layer.Response_Model;
 using Services_Layer.Services.Product_Services;
 using System;
 using System.Collections.Generic;
@@ -28,31 +29,40 @@ namespace Services_Layer.Services.Distributor_Services
 
 
 
-        public List<Distributor> GetDistributors()
+        public GenericResponse<List<Distributor>> GetDistributors()
         {
-            List<Distributor> country_list = _unitOfWork.Distributor_Repo.GetAll();
-          
-            return country_list;
+            var country_list = _unitOfWork.Distributor_Repo.GetAll();
+            GenericResponse<List<Distributor>> Dis_List = new GenericResponse<List<Distributor>>()
+            {
+                Data = country_list,
+                Message = "Get Distributors Successfully"
+            };
+
+            return Dis_List;
         }
 
 
 
-        public Distributor? GetByID(int id)
+        public GenericResponse<Distributor?> GetByID(int id)
         {
             Distributor phar = _unitOfWork.Distributor_Repo.Get(id);
-            
+           
             if (phar != null)
             {
-                return phar;
+                GenericResponse<Distributor> dis = new GenericResponse<Distributor>() { Data = phar, Message = "Get Distributor Successfully" };
+                return dis;
             }
             else
-            { return null; }
+            {
+                GenericResponse<Distributor> dis = new GenericResponse<Distributor>() { Data = null, Message = "Get Distributor Successfully" };
+                return dis; 
+            }
 
         }
 
 
 
-        public Distributor? Add(DistributorDTO Distributor)
+        public GenericResponse<Distributor?> Add(DistributorDTO Distributor)
         {
             Distributor con = _mapper.Map<Distributor>(Distributor);
             _unitOfWork.Distributor_Repo.Insert(con);
@@ -62,23 +72,26 @@ namespace Services_Layer.Services.Distributor_Services
 
                 if (savedChanges > 0)
                 {
-                    return con;
+                    GenericResponse<Distributor> dis = new GenericResponse<Distributor>() { Data = con, Message = "Get Distributor Successfully" };
+                    return dis;
                 }
                 else
                 {
-                    return null;
+                    GenericResponse<Distributor> dis = new GenericResponse<Distributor>() { Data = null, Message = "Get Distributor Successfully" };
+                    return dis;
                 }
             }
             catch (Exception ex)
             {
-                return null;
+                GenericResponse<Distributor> dis = new GenericResponse<Distributor>() { Data = null, Message = "Get Distributor Successfully" };
+                return dis;
             }
 
         }
            
 
 
-        public bool Update(int id, UpdateDistributorDTO Distributor)
+        public GenericResponse<bool> Update(int id, UpdateDistributorDTO Distributor)
         {
 
 
@@ -86,22 +99,28 @@ namespace Services_Layer.Services.Distributor_Services
             {
                 _unitOfWork.Distributor_Repo.Update(_mapper.Map<Distributor>(Distributor));
                 _unitOfWork.Save();
-                return true;
+                var res = new GenericResponse<bool>() { Message = "Deleted Distributor Successfully", Data = true };
+                return res;
+
             }
-            return false;
+            var response = new GenericResponse<bool>() { Message = "Delete Distributor Failed", Data = false };
+            return response;
         }
 
 
-        public bool Remove(int ID)
+        public GenericResponse<bool> Remove(int ID)
         {
             var pro = _unitOfWork.Distributor_Repo.Get(ID);
             if (pro != null)
             {
                 _unitOfWork.Distributor_Repo.Delete(ID);
                 _unitOfWork.Save();
-                return true;
+                var res = new GenericResponse<bool>() { Message = "Deleted Distributor Successfully", Data = true };
+                return res;
+
             }
-            return false;
+            var response = new GenericResponse<bool>() { Message = "Delete Distributor Failed", Data = false };
+            return response;
         }
 
 

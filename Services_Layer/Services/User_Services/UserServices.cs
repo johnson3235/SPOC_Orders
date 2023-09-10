@@ -11,6 +11,7 @@ using Services_Layer.DTOS.Distributor;
 using Services_Layer.DTOS.Pharmacies;
 using Services_Layer.DTOS.Products;
 using Services_Layer.DTOS.User;
+using Services_Layer.Response_Model;
 using Services_Layer.Services.Product_Services;
 using Services_Layer.Services.User_Services;
 using System;
@@ -37,7 +38,7 @@ namespace Services_Layer.Services.User_Services
        
         }
 
-        public async Task<List<UserDTO>> GetAllUsers()
+        public async Task<GenericResponse<List<UserDTO>>> GetAllUsers()
         {
             List<CustomUser> users = await _unitOfWork.User_Repo.Users.ToListAsync();
             List<UserDTO> users_list = new List<UserDTO>();
@@ -47,24 +48,24 @@ namespace Services_Layer.Services.User_Services
             }
            
            
-            return users_list;
+            return new GenericResponse<List<UserDTO>>() { Data = users_list , Message ="Get Users Successfully"};
         }
 
-        public async Task<UserDTO?> GetUserById(int id)
+        public async Task<GenericResponse<UserDTO?>> GetUserById(int id)
         {
             CustomUser user = await _unitOfWork.User_Repo.FindByIdAsync(id.ToString());
             if(user != null)
             {
                 UserDTO user_Dto = new UserDTO() { Id = user.Id, userName = user.UserName, Manager = user.Manager };
 
-                return user_Dto;
+                return new GenericResponse<UserDTO>() { Data = user_Dto, Message = "Get Users Successfully" }; 
             }
-            return null;
-           
+            return new GenericResponse<UserDTO>() { Data = null, Message = "Get Users Failed" };
+
         }
 
 
-        public async Task<List<UserDTO>> FillterByRole(int role_id)
+        public async Task<GenericResponse<List<UserDTO>>> FillterByRole(int role_id)
         {
             List<CustomUser> users = await _unitOfWork.User_Repo.Users.Where(u=>u.RoleId == role_id).ToListAsync();
             List<UserDTO> users_list = new List<UserDTO>();
@@ -74,10 +75,10 @@ namespace Services_Layer.Services.User_Services
             }
 
 
-            return users_list;
+            return new GenericResponse<List<UserDTO>>() { Data = users_list, Message = "Get Users Successfully" };
         }
 
-        public async Task<List<UserDTO>> GetAllDM()
+        public async Task<GenericResponse<List<UserDTO>>> GetAllDM()
         {
             List<CustomUser> users = await _unitOfWork.User_Repo.Users.Where(c=>c.RoleId == 1).ToListAsync();
             List<UserDTO> users_list = new List<UserDTO>();
@@ -87,10 +88,10 @@ namespace Services_Layer.Services.User_Services
             }
 
 
-            return users_list;
+            return new GenericResponse<List<UserDTO>>() { Data = users_list, Message = "Get Users Successfully" }; 
         }
 
-        public async Task<List<UserDTO>> GetAllMedRep()
+        public async Task<GenericResponse<List<UserDTO>>> GetAllMedRep()
         {
             List<CustomUser> users = await _unitOfWork.User_Repo.Users.Where(c => c.RoleId == 2).ToListAsync();
             List<UserDTO> users_list = new List<UserDTO>();
@@ -98,12 +99,11 @@ namespace Services_Layer.Services.User_Services
             {
                 users_list.Add(new UserDTO() { Id = user.Id, userName = user.UserName, Manager = user.Manager });
             }
-
-            return users_list;
+            return new GenericResponse<List<UserDTO>>() { Data = users_list, Message = "Get Users Successfully" };
         }
 
 
-        public async Task<bool> Register(RegisiterDTO newUserDto)
+        public async Task<GenericResponse<bool>> Register(RegisiterDTO newUserDto)
         {
             CustomUser appUser = new CustomUser();
             appUser.UserName = newUserDto.userName;
@@ -113,13 +113,13 @@ namespace Services_Layer.Services.User_Services
             IdentityResult result =
                 await _unitOfWork.User_Repo.CreateAsync(appUser, appUser.PasswordHash);
             if (result.Succeeded)
-                return true;
+                return new GenericResponse<bool>() { Data = true, Message = "User Created Successfully" }; 
             else
-                return false;
+                return new GenericResponse<bool>() { Data = false, Message = "User Created Failed" };
 
         }
 
-        public async Task<tokenDTO> Login
+        public async Task<GenericResponse<tokenDTO?>> Login
             (LoginDTO newUser, [FromServices] IConfiguration config)
         {
             //check
@@ -130,40 +130,45 @@ namespace Services_Layer.Services.User_Services
                 bool found = await _unitOfWork.User_Repo.CheckPasswordAsync(appUserModel, newUser.Password);
                 if (found)
                 {
-                    //userManager.GetRolesAsync(appUserModel);
-                    List<Claim> claims = new List<Claim>();
-                    claims.Add(new Claim(ClaimTypes.Name, newUser.userName));
-                    claims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
-                    //claims.Add(new Claim(ClaimTypes.Role,));
-
-                    var symKey =
-                        new SymmetricSecurityKey(
-                            Encoding.UTF8.GetBytes(config["JWT:Key"]));
-
-                    var signInCredentials = new SigningCredentials
-                        (symKey, SecurityAlgorithms.HmacSha256);
 
 
-                    JwtSecurityToken UserToken = new JwtSecurityToken(
-                        issuer: config["JWT:Issues"],
-                        audience: config["JWT:Audiance"],
-                        expires: DateTime.Now.AddHours(1),
-                        claims: claims,
-                        signingCredentials: signInCredentials
-                        );
 
 
-                    return new tokenDTO() { token = new JwtSecurityTokenHandler().WriteToken(UserToken), expired_date = UserToken.ValidTo };
-                
+
+                    ////userManager.GetRolesAsync(appUserModel);
+                    //List<Claim> claims = new List<Claim>();
+                    //claims.Add(new Claim(ClaimTypes.Name, newUser.userName));
+                    //claims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
+                    ////claims.Add(new Claim(ClaimTypes.Role,));
+
+                    //var symKey =
+                    //    new SymmetricSecurityKey(
+                    //        Encoding.UTF8.GetBytes(config["JWT:Key"]));
+
+                    //var signInCredentials = new SigningCredentials
+                    //    (symKey, SecurityAlgorithms.HmacSha256);
+
+
+                    //JwtSecurityToken UserToken = new JwtSecurityToken(
+                    //    issuer: config["JWT:Issues"],
+                    //    audience: config["JWT:Audiance"],
+                    //    expires: DateTime.Now.AddHours(1),
+                    //    claims: claims,
+                    //    signingCredentials: signInCredentials
+                    //    );
+                    //var token = new tokenDTO() { token = new JwtSecurityTokenHandler().WriteToken(UserToken), expired_date = UserToken.ValidTo };
+
+                    return new GenericResponse<tokenDTO>() { Data = null, Message = "User Login Successfully" };
+
                 }
             }
 
-            return null;
+            return new GenericResponse<tokenDTO>() { Data = null, Message = "User Login Failed" };
         }
 
 
 
-        public async Task<bool> ResetPassword(ResetPasswordDTO resetPasswordDto)
+        public async Task<GenericResponse<bool>> ResetPassword(ResetPasswordDTO resetPasswordDto)
         {
             // Find the user by username (you can modify this to use email or other identifiers)
             CustomUser user = await _unitOfWork.User_Repo.FindByNameAsync(resetPasswordDto.UserName);
@@ -177,16 +182,16 @@ namespace Services_Layer.Services.User_Services
 
                     if (result.Succeeded)
                     {
-                        return true;
+                        return new GenericResponse<bool>() { Data = true, Message = "User Reset Password Successfully" };
                     }
                     else
                     {
-                        return false;
+                          return new GenericResponse<bool>() { Data = false, Message = "User Reset Password Failed" };
                     }
                 }
-                return false;
+                return new GenericResponse<bool>() { Data = false, Message = "User Reset Password Failed" };
             }
-            return false;
+            return new GenericResponse<bool>() { Data = false, Message = "User Reset Password Failed" };
         }
     }
 }

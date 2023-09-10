@@ -5,6 +5,7 @@ using Repo_Layer.Repositry;
 using Repo_Layer.UnitOfWork;
 using Services_Layer.DTOS.Pharmacies;
 using Services_Layer.DTOS.Products;
+using Services_Layer.Response_Model;
 using Services_Layer.Services.Product_Services;
 using System;
 using System.Collections.Generic;
@@ -27,32 +28,36 @@ namespace Services_Layer.Services.Country_Services
 
 
 
-        public List<Country> GetCountries()
+        public GenericResponse<List<Country>> GetCountries()
         {
 
             List<Country> country_list = _unitOfWork.Country_Repo.GetAll();
-          
-            return country_list;
+            GenericResponse<List<Country>> coun = new GenericResponse<List<Country>>() { Data = country_list, Message = "Get Countries Successfully" };
+            return coun;
         }
 
 
 
-        public Country? GetByID(int id)
+        public GenericResponse<Country?> GetByID(int id)
         {
             Country phar = _unitOfWork.Country_Repo.Get(id);
             
             if (phar != null)
             {
-                return phar;
+                GenericResponse<Country?> res = new GenericResponse<Country?>() { Data = phar, Message = "Get Country Successfully" };
+                return res;
             }
             else
-            { return null; }
+            {
+                GenericResponse<Country?> res = new GenericResponse<Country?>() { Data = null, Message = "Get Country Failed" };
+                return res;
+            }
 
         }
 
 
 
-        public Country? Add(CountryDTO Country)
+        public GenericResponse<Country?> Add(CountryDTO Country)
         {
             Country con = _mapper.Map<Country>(Country);
             _unitOfWork.Country_Repo.Insert(con);
@@ -62,23 +67,23 @@ namespace Services_Layer.Services.Country_Services
 
                 if (savedChanges > 0)
                 {
-                    return con;
+                    return new GenericResponse<Country?>() { Data = con, Message = "Added Country Successfully" };
                 }
                 else
                 {
-                    return null;
+                    return new GenericResponse<Country?>() { Data = null, Message = "Added Country Failed" };
                 }
             }
             catch (Exception ex)
             {
-                return null;
+                return new GenericResponse<Country?>() { Data = null, Message = "Added Country Failed Exception" };
             }
 
         }
            
 
 
-        public bool Update(int id, UpdateCountryDTO Country)
+        public GenericResponse<bool> Update(int id, UpdateCountryDTO Country)
         {
 
 
@@ -86,22 +91,28 @@ namespace Services_Layer.Services.Country_Services
             {
                 _unitOfWork.Country_Repo.Update(_mapper.Map<Country>(Country));
                 _unitOfWork.Save();
-                return true;
+                var res = new GenericResponse<bool>() { Message = "Updated Country Successfully", Data = true };
+                return res;
+
             }
-            return false;
+            var response = new GenericResponse<bool>() { Message = "Updated Country Failed", Data = false };
+            return response;
         }
 
 
-        public bool Remove(int ID)
+        public GenericResponse<bool> Remove(int ID)
         {
             var pro = _unitOfWork.Country_Repo.Get(ID);
             if (pro != null)
             {
                 _unitOfWork.Country_Repo.Delete(ID);
                 _unitOfWork.Save();
-                return true;
+                var res = new GenericResponse<bool>() { Message = "Deleted Country Successfully", Data = true };
+                return res;
+
             }
-            return false;
+            var response = new GenericResponse<bool>() { Message = "Delete Country Failed", Data = false };
+            return response;
         }
 
 
