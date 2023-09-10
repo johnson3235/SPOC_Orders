@@ -7,6 +7,7 @@ using Services_Layer.DTOS.Distributor;
 using Services_Layer.DTOS.Pharmacies;
 using Services_Layer.DTOS.Products;
 using Services_Layer.DTOS.User;
+using Services_Layer.Response_Model;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -20,23 +21,25 @@ namespace Services_Layer.Services.User_Services
     public interface IUserServices
     {
 
-        public  Task<bool> Register(RegisiterDTO newUserDto);
+        public  Task<GenericResponse<List<UserDTO>>> GetAllUsers();
 
-        public  Task<tokenDTO> Login
+        public  Task<GenericResponse<UserDTO?>> GetUserById(int id);
+
+
+        public  Task<GenericResponse<List<UserDTO>>> FillterByRole(int role_id);
+
+        public  Task<GenericResponse<List<UserDTO>>> GetAllDM();
+        public  Task<GenericResponse<List<UserDTO>>> GetAllMedRep();
+
+
+        public  Task<GenericResponse<bool>> Register(RegisiterDTO newUserDto);
+
+        public  Task<GenericResponse<tokenDTO?>> Login
             (LoginDTO newUser, [FromServices] IConfiguration config);
 
-        public Task<bool> ResetPassword(ResetPasswordDTO resetPasswordDto);
-
-        public  Task<List<UserDTO>> GetAllUsers();
-
-        public  Task<UserDTO> GetUserById(int id);
 
 
-        public  Task<List<UserDTO>> FillterByRole(int role_id);
-
-        public  Task<List<UserDTO>> GetAllDM();
-
-        public  Task<List<UserDTO>> GetAllMedRep();
+        public  Task<GenericResponse<bool>> ResetPassword(ResetPasswordDTO resetPasswordDto);
 
 
     }

@@ -8,6 +8,7 @@ using Repo_Layer.Repositry.Branch_Repo;
 using Services_Layer.Services.Branch_Services;
 using Services_Layer.DTOS.Branches;
 using System.Collections.Generic;
+using Services_Layer.Response_Model;
 
 namespace SPOC_Orders.Controllers
 {
@@ -27,19 +28,19 @@ namespace SPOC_Orders.Controllers
 
         [HttpGet]
         //[Authorize]
-        public ActionResult<List<BranchWithDistributorAndCountry>> GetBranches()
+        public ActionResult<GenericResponse<List<BranchWithDistributorAndCountry>>> GetBranches()
         {
-            List<BranchWithDistributorAndCountry> con_list = Branch_services.GetBranches();
+           var con_list = Branch_services.GetBranches();
 
             return Ok(con_list);
         }
 
         [HttpGet("{id:int}")]
         // [Authorize]
-        public ActionResult<BranchWithDistributorAndCountry> GetByID(int id)
+        public ActionResult<GenericResponse<BranchWithDistributorAndCountry>> GetByID(int id)
         {
-            BranchWithDistributorAndCountry con = Branch_services.GetByID(id);
-            if (con != null)
+            var con = Branch_services.GetByID(id);
+            if (con.Data != null)
             {
                 return Ok(con);
             }
@@ -50,18 +51,18 @@ namespace SPOC_Orders.Controllers
 
         [HttpGet("fillter/country/{id:int}")]
         // [Authorize]
-        public ActionResult<List<BranchWithDistributorAndCountry>> GetByCountryID(int id)
+        public ActionResult<GenericResponse<List<BranchWithDistributorAndCountry>>> GetByCountryID(int id)
         {
-            List<BranchWithDistributorAndCountry> con = Branch_services.FillterByCountry(id);
+            var con = Branch_services.FillterByCountry(id);
             return Ok(con);
 
         }
 
         [HttpGet("fillter/distributor/{id:int}")]
         // [Authorize]
-        public ActionResult<List<BranchWithDistributorAndCountry>> GetByDistributorID(int id)
+        public ActionResult<GenericResponse<List<BranchWithDistributorAndCountry>>> GetByDistributorID(int id)
         {
-             List < BranchWithDistributorAndCountry > con = Branch_services.FillterByDistrbutor(id);
+             var con = Branch_services.FillterByDistrbutor(id);
 
                 return Ok(con);
         }
@@ -69,9 +70,9 @@ namespace SPOC_Orders.Controllers
 
         [HttpGet("fillter/{distributor_id:int}/{country_id:int}")]
        // [Authorize]
-        public ActionResult<List<BranchWithDistributorAndCountry>> GetByDisAndConID(int distributor_id, int country_id)
+        public ActionResult<GenericResponse<List<BranchWithDistributorAndCountry>>> GetByDisAndConID(int distributor_id, int country_id)
         {
-            List<BranchWithDistributorAndCountry> con = Branch_services.FillterByCountryAndDistributor(distributor_id, country_id);
+            var con = Branch_services.FillterByCountryAndDistributor(distributor_id, country_id);
 
                 return Ok(con);
         }
@@ -84,7 +85,7 @@ namespace SPOC_Orders.Controllers
             
             return CreatedAtAction(
                 "GetByID",
-                new { id = con2.Id }
+                new { id = con2.Data.Id }
                 , con);
         }
 
@@ -96,8 +97,8 @@ namespace SPOC_Orders.Controllers
         {
 
 
-            bool complete = Branch_services.Update(id, NewBranch);
-            if (complete == true)
+            var complete = Branch_services.Update(id, NewBranch);
+            if (complete.Data == true)
             {
                 return Ok();
             }
@@ -112,8 +113,8 @@ namespace SPOC_Orders.Controllers
         public IActionResult Remove(int ID)
         {
 
-            bool complete = Branch_services.Remove(ID);
-            if (complete == true)
+            var complete = Branch_services.Remove(ID);
+            if (complete.Data == true)
             {
                 return NoContent();
             }

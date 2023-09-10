@@ -6,6 +6,7 @@ using Repo_Layer.UnitOfWork;
 using Services_Layer.DTOS.Distributor;
 using Services_Layer.DTOS.Pharmacies;
 using Services_Layer.DTOS.Products;
+using Services_Layer.Response_Model;
 using Services_Layer.Services.Product_Services;
 using System;
 using System.Collections.Generic;
@@ -28,31 +29,32 @@ namespace Services_Layer.Services.Role_Services
 
 
 
-        public List<Role> GetRoles()
+        public GenericResponse<List<Role>> GetRoles()
         {
             List<Role> Role_list = _unitOfWork.Role_Repo.GetAll();
-          
-            return Role_list;
+            var respose = new GenericResponse<List<Role>>() {Message= "Get Roles Successfully" ,Data = Role_list };
+            return respose;
         }
 
 
 
-        public Role? GetByID(int id)
+        public GenericResponse<Role?> GetByID(int id)
         {
             Role phar = _unitOfWork.Role_Repo.Get(id);
-            
+
             if (phar != null)
             {
-                return phar;
+                var respose = new GenericResponse<Role>() { Message = "Get Role Successfully", Data = phar };
+                return respose;
             }
             else
-            { return null; }
+            { return new GenericResponse<Role>() { Message = "Get Role Successfully", Data = null }; }
 
         }
 
 
 
-        public Role? Add(RoleDTO Role)
+        public GenericResponse<Role?> Add(RoleDTO Role)
         {
             Role con = _mapper.Map<Role>(Role);
             _unitOfWork.Role_Repo.Insert(con);
@@ -62,46 +64,51 @@ namespace Services_Layer.Services.Role_Services
 
                 if (savedChanges > 0)
                 {
-                    return con;
+                    var respose = new GenericResponse<Role>() { Message = "Add Role Successfully", Data = con };
+                    return respose;
                 }
                 else
                 {
-                    return null;
+                    return new GenericResponse<Role>() { Message = "Add Role Failed", Data = null };
                 }
             }
             catch (Exception ex)
             {
-                return null;
+                return new GenericResponse<Role>() { Message = "Add Role Failed", Data = null };
             }
 
         }
            
 
 
-        public bool Update(int id, UpdateRoleDTO Role)
+        public GenericResponse<bool> Update(int id, UpdateRoleDTO Role)
         {
-
 
             if (id == Role.Id)
             {
                 _unitOfWork.Role_Repo.Update(_mapper.Map<Role>(Role));
                 _unitOfWork.Save();
-                return true;
+                var res = new GenericResponse<bool>() { Message = "Add Role Successfully", Data = true };
+                return res;
+
             }
-            return false;
+            var response = new GenericResponse<bool>() { Message = "Add Role Failed", Data = false };
+            return response;
         }
 
 
-        public bool Remove(int Id)
+        public GenericResponse<bool> Remove(int Id)
         {
             var pro = _unitOfWork.Role_Repo.Get(Id);
             if (pro != null)
             {
                 _unitOfWork.Role_Repo.Delete(Id);
                 _unitOfWork.Save();
-                return true;
+                var res = new GenericResponse<bool>() { Message = "Add Role Successfully", Data = true };
+                return res;
             }
-            return false;
+            var response = new GenericResponse<bool>() { Message = "Add Role Failed", Data = false };
+            return response;
 
         }
 

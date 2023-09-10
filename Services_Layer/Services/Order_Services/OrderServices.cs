@@ -6,6 +6,7 @@ using Services_Layer.DTOS.Branches;
 using Services_Layer.DTOS.Orders;
 using Services_Layer.DTOS.Products;
 using Services_Layer.DTOS.User;
+using Services_Layer.Response_Model;
 using Services_Layer.Services.Country_Services;
 using System;
 using System.Collections.Generic;
@@ -27,7 +28,7 @@ namespace Services_Layer.Services.Order_Services
         }
 
 
-        public List<GetOrderDTO> GetOrders()
+        public GenericResponse<List<GetOrderDTO>> GetOrders()
         {
             List<Order> order_list = _unitOfWork.Order_Repo.GetOrdersWithData();
 
@@ -44,27 +45,27 @@ namespace Services_Layer.Services.Order_Services
                 order_DTO.Add(_mapper.Map<GetOrderDTO>(order));
             }
 
-            return order_DTO;
+            return new GenericResponse<List<GetOrderDTO>>() { Data = order_DTO , Message="Get Orders Successfully"};
 
         }
 
 
 
-        public GetOrderDTO? GetByID(int id)
+        public GenericResponse<GetOrderDTO?> GetByID(int id)
         {
             Order order = _unitOfWork.Order_Repo.GetAllDataForId(id);
 
             if (order != null)
             {
                 GetOrderDTO order_DTO = _mapper.Map<GetOrderDTO>(order);
-                return order_DTO;
+                return new GenericResponse<GetOrderDTO?>() { Data= order_DTO, Message = "Get Order Successfully"};
             }
             else
-            { return null; }
+            { return new GenericResponse<GetOrderDTO?>() { Data = null, Message = "Get Order Successfully" }; ; }
 
         }
 
-        public async Task<Order?> Add(AddOrderDTO Order)
+        public async Task<GenericResponse<Order?>> Add(AddOrderDTO Order)
         {
 
 
@@ -93,23 +94,23 @@ namespace Services_Layer.Services.Order_Services
                 
                 if (savedChanges > 0)
                 {
-                    return order;
+                    return new GenericResponse<Order?>() { Data = order, Message = "Added Order Successfully" }; 
                 }
                 else
                 {
-                    return null;
+                    return new GenericResponse<Order?>() { Data = null, Message = "Added Order Failed" };
                 }
             }
             catch (Exception ex)
             {
-                return null;
+                return new GenericResponse<Order?>() { Data = null, Message = "Added Order Failed" };
             }
 
         }
 
 
 
-        public async Task<bool> Update(int id, UpdateOrderDTO Order)
+        public async Task<GenericResponse<bool>> Update(int id, UpdateOrderDTO Order)
         {
 
             var find_order = _unitOfWork.Order_Repo.Get(id);
@@ -151,34 +152,37 @@ namespace Services_Layer.Services.Order_Services
 
                     if (savedChanges > 0)
                     {
-                        return true;
+                        return new GenericResponse<bool>() { Message = "Updated Order Successfully", Data = true };
                     }
                     else
                     {
-                        return false;
+                        return new GenericResponse<bool>() { Message = "Updated Order Failed", Data = false };
                     }
                     
                 }
                 catch (Exception ex)
                 {
-                    return false;
+                    return new GenericResponse<bool>() { Message = "Updated Order Failed Exception", Data = false };
                 }
         }
-            return false;
+            return new GenericResponse<bool>() { Message = "Updated Order Failed", Data = false };
 
         }
 
 
-        public bool Remove(int ID)
+        public GenericResponse<bool> Remove(int ID)
         {
             var order = _unitOfWork.Order_Repo.Get(ID);
             if (order != null)
             {
                 _unitOfWork.Order_Repo.Delete(ID);
                 _unitOfWork.Save();
-                return true;
+                var res = new GenericResponse<bool>() { Message = "Deleted Country Successfully", Data = true };
+                return res;
+
             }
-            return false;
+            var response = new GenericResponse<bool>() { Message = "Delete Country Failed", Data = false };
+            return response;
         }
 
 

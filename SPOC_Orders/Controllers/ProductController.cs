@@ -4,6 +4,7 @@ using DB_Layer.Models;
 using Repo_Layer.Repositry;
 using Services_Layer.DTOS.Products;
 using Services_Layer.Services.Product_Services;
+using Services_Layer.Response_Model;
 
 namespace SPOC_Orders.Controllers
 {
@@ -21,9 +22,9 @@ namespace SPOC_Orders.Controllers
 
         [HttpGet]
         //[Authorize]
-        public ActionResult<List<Product>> GetProducts()
+        public ActionResult<GenericResponse<List<Product>>> GetProducts()
         {
-            List<Product> pro_list = services.GetProducts();
+            GenericResponse<List<Product>> pro_list = services.GetProducts();
            
             return Ok(pro_list);
         }
@@ -31,10 +32,10 @@ namespace SPOC_Orders.Controllers
 
         [HttpGet("{id:int}")]
       //  [Authorize]
-        public ActionResult<Product> GetByID(int id)
+        public ActionResult<GenericResponse<Product>?> GetByID(int id)
         {
-            Product? pro = services.GetByID(id);
-            if (pro != null)
+           GenericResponse<Product>? pro = services.GetByID(id);
+            if (pro.Data != null)
             {
                 return Ok(pro);
             }
@@ -47,11 +48,18 @@ namespace SPOC_Orders.Controllers
        // [Authorize]
         public IActionResult Add(ProductDTO Product)
         {
-           Product pro=  services.Add(Product);
-            return CreatedAtAction(
-                "GetByID",
-                new { id = pro.Id }
-                , pro);
+            GenericResponse<Product>? pro =  services.Add(Product);
+
+            if (pro.Data != null)
+            {
+                return CreatedAtAction(
+    "GetByID",
+    new { id = pro.Data.Id }
+    , pro);
+            }
+            else
+            { return BadRequest("Some Thing Error"); }
+
         }
 
 
@@ -63,10 +71,11 @@ namespace SPOC_Orders.Controllers
 
             if (id == NewProduct.Id)
             {
-                bool complete = services.Update(id, NewProduct);
-                if(complete == true)
+
+                var complete = services.Update(id, NewProduct);
+                if (complete.Data == true)
                 {
-                    return Ok();
+                    return Ok(complete);
                 }
                 else
                 {
@@ -80,10 +89,10 @@ namespace SPOC_Orders.Controllers
        // [Authorize]
         public IActionResult Remove(int ProductID)
         {
-            bool complete = services.Remove(ProductID);
-            if(complete == true)
+            var complete = services.Remove(ProductID);
+            if(complete.Data == true)
             {
-                return NoContent();
+                return Ok(complete);
             }
             else
             {

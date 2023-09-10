@@ -2,6 +2,7 @@
 using Services_Layer.DTOS.Branches;
 using Services_Layer.DTOS.Pharmacies;
 using Services_Layer.DTOS.Products;
+using Services_Layer.Response_Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,25 +14,31 @@ namespace Services_Layer.Services.Branch_Services
     public interface IBranchServices
     {
 
-        public List<BranchWithDistributorAndCountry> GetBranches();
+        public GenericResponse<List<BranchWithDistributorAndCountry>> GetBranches();
 
-        public List<BranchWithDistributorAndCountry> FillterByCountry(int country_id);
-
-        public List<BranchWithDistributorAndCountry> FillterByDistrbutor(int dis_id);
+        public GenericResponse<List<BranchWithDistributorAndCountry>> FillterByCountry(int country_id);
 
 
-        public List<BranchWithDistributorAndCountry> FillterByCountryAndDistributor(int dis_id, int country_id);
+        public GenericResponse<List<BranchWithDistributorAndCountry>> FillterByDistrbutor(int dis_id);
 
 
-        public BranchWithDistributorAndCountry? GetByID(int id);
+
+        public GenericResponse<List<BranchWithDistributorAndCountry>> FillterByCountryAndDistributor(int dis_id, int country_id);
 
 
-        public Branch Add(BranchDTO con);
+
+        public GenericResponse<BranchWithDistributorAndCountry?> GetByID(int id);
 
 
-        public bool Update(int id, UpdateBranchDTO con);
+
+        public GenericResponse<Branch?> Add(BranchDTO Branch);
 
 
-        public bool Remove(int ID);
+
+        public GenericResponse<bool> Update(int id, UpdateBranchDTO Branch);
+
+
+        public GenericResponse<bool> Remove(int ID);
+
     }
 }

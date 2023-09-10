@@ -2,6 +2,7 @@
 using Services_Layer.DTOS.Distributor;
 using Services_Layer.DTOS.Pharmacies;
 using Services_Layer.DTOS.Products;
+using Services_Layer.Response_Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,19 +14,22 @@ namespace Services_Layer.Services.Distributor_Services
     public interface IDistributorServices
     {
 
-        public List<Distributor> GetDistributors();
+
+        public GenericResponse<List<Distributor>> GetDistributors();
+
+
+        public GenericResponse<Distributor?> GetByID(int id);
 
 
 
-        public Distributor? GetByID(int id);
+        public GenericResponse<Distributor?> Add(DistributorDTO Distributor);
 
 
-        public Distributor Add(DistributorDTO con);
+
+        public GenericResponse<bool> Update(int id, UpdateDistributorDTO Distributor);
 
 
-        public bool Update(int id, UpdateDistributorDTO Distributor);
+        public GenericResponse<bool> Remove(int ID);
 
-
-        public bool Remove(int ID);
     }
 }

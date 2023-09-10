@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Services_Layer.DTOS.User;
+using Services_Layer.Services.MicrosoftGraphHelper;
 using Services_Layer.Services.User_Services;
 
 namespace SPOC_Orders.Controllers
@@ -13,9 +14,11 @@ namespace SPOC_Orders.Controllers
     {
 
         private readonly IUserServices User_services;
-        public UserController(IUserServices User_services)
+        private readonly IMicrosoftGraphHelper Login_Services;
+        public UserController(IUserServices User_services, IMicrosoftGraphHelper Login_Services)
         {
             this.User_services = User_services;
+            this.Login_Services = Login_Services;
         }
 
 
@@ -27,7 +30,7 @@ namespace SPOC_Orders.Controllers
         }
 
 
-        [HttpGet("All-DM")]
+        [HttpGet("DM")]
         public async Task<IActionResult> GetAllDM()
         {
             var users = await User_services.GetAllDM();
@@ -36,7 +39,7 @@ namespace SPOC_Orders.Controllers
 
 
 
-        [HttpGet("All-MedRep")]
+        [HttpGet("MedRep")]
         public async Task<IActionResult> GetAllMedRep()
         {
             var users = await User_services.GetAllMedRep();
@@ -48,8 +51,8 @@ namespace SPOC_Orders.Controllers
         // [Authorize]
         public async Task<ActionResult> GetByID(int id)
         {
-            UserDTO con = await User_services.GetUserById(id);
-            if (con != null)
+            var con = await User_services.GetUserById(id);
+            if (con.Data != null)
             {
                 return Ok(con);
             }
@@ -63,16 +66,16 @@ namespace SPOC_Orders.Controllers
         // [Authorize]
         public async Task<ActionResult> FillterByRole(int Roleid)
         {
-            List<UserDTO> con = await User_services.FillterByRole(Roleid);
+            var con = await User_services.FillterByRole(Roleid);
 
             return Ok(con);
         }
 
-        [HttpPost("login-user")]
+        [HttpPost("login")]
         public async Task<ActionResult> Login(LoginDTO newUser, [FromServices] IConfiguration config)
         {
            var token = await User_services.Login(newUser, config);
-            if(token != null)
+            if(token.Data != null)
             { return Ok(token); }
              return BadRequest("Invalid User Data");
             
@@ -82,7 +85,7 @@ namespace SPOC_Orders.Controllers
         public async Task<ActionResult> Register(RegisiterDTO newUser)
         {
             var token = await User_services.Register(newUser);
-            if (token)
+            if (token.Data)
             { return Ok("User Created Success"); }
             return BadRequest("Invalid User Data");
 
@@ -94,7 +97,7 @@ namespace SPOC_Orders.Controllers
         {
             var complete = await User_services.ResetPassword(resetPasswordDto);
 
-            if (complete)
+            if (complete.Data)
             {
                 return Ok("Password reset successful.");
             }
@@ -102,6 +105,13 @@ namespace SPOC_Orders.Controllers
             {
                 return BadRequest("Password reset failed.");
             }
+        }
+
+        [HttpPost("o2login")]
+        public async Task<IActionResult> Login(LoginDTO  data)
+        {
+           var token =  Login_Services.AcquireATokenFromUsernamePasswordAsync(data.userName, data.Password);
+            return Ok(token);
         }
 
 

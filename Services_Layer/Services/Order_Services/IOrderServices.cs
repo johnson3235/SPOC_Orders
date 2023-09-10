@@ -2,6 +2,7 @@
 using Services_Layer.DTOS.Branches;
 using Services_Layer.DTOS.Orders;
 using Services_Layer.DTOS.Products;
+using Services_Layer.Response_Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,14 +14,19 @@ namespace Services_Layer.Services.Order_Services
     public interface IOrderServices
     {
 
-        public List<GetOrderDTO> GetOrders();
+        public GenericResponse<List<GetOrderDTO>> GetOrders();
 
-        public GetOrderDTO? GetByID(int id);
-        public  Task<Order?> Add(AddOrderDTO Order);
 
-       // public Task<string> Update(int id, UpdateOrderDTO Order);
-       public  Task<bool> Update(int id, UpdateOrderDTO Order);
 
-        public bool Remove(int ID);
+        public GenericResponse<GetOrderDTO?> GetByID(int id);
+
+        public  Task<GenericResponse<Order?>> Add(AddOrderDTO Order);
+
+
+
+        public  Task<GenericResponse<bool>> Update(int id, UpdateOrderDTO Order);
+
+
+        public GenericResponse<bool> Remove(int ID);
     }
 }

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Services_Layer.DTOS.Distributor;
 using Services_Layer.DTOS.Products;
+using Services_Layer.Response_Model;
 using Services_Layer.Services.Country_Services;
 using Services_Layer.Services.Distributor_Services;
 
@@ -22,9 +23,9 @@ namespace SPOC_Orders.Controllers
 
         [HttpGet]
         //[Authorize]
-        public ActionResult<List<Distributor>> GetDistributors()
+        public ActionResult<GenericResponse<List<Distributor>>> GetDistributors()
         {
-            List<Distributor> con_list = Distributor_services.GetDistributors();
+            var con_list = Distributor_services.GetDistributors();
 
             return Ok(con_list);
         }
@@ -32,10 +33,10 @@ namespace SPOC_Orders.Controllers
 
         [HttpGet("{id:int}")]
         // [Authorize]
-        public ActionResult<Distributor> GetByID(int id)
+        public ActionResult<GenericResponse<Distributor>> GetByID(int id)
         {
-            Distributor con = Distributor_services.GetByID(id);
-            if (con != null)
+            var con = Distributor_services.GetByID(id);
+            if (con.Data != null)
             {
                 return Ok(con);
             }
@@ -52,7 +53,7 @@ namespace SPOC_Orders.Controllers
 
             return CreatedAtAction(
                 "GetByID",
-                new { id = con2.ID }
+                new { id = con2.Data.ID }
                 , con);
         }
 
@@ -64,8 +65,8 @@ namespace SPOC_Orders.Controllers
         {
 
 
-            bool complete = Distributor_services.Update(id, NewDistributor);
-            if (complete == true)
+            var complete = Distributor_services.Update(id, NewDistributor);
+            if (complete.Data == true)
             {
                 return Ok();
             }
@@ -81,8 +82,8 @@ namespace SPOC_Orders.Controllers
         public IActionResult Remove(int ID)
         {
 
-            bool complete = Distributor_services.Remove(ID);
-            if (complete == true)
+            var complete = Distributor_services.Remove(ID);
+            if (complete.Data == true)
             {
                 return NoContent();
             }

@@ -4,6 +4,7 @@ using Repo_Layer.UnitOfWork;
 using Services_Layer.DTOS.Branches;
 using Services_Layer.DTOS.Pharmacies;
 using Services_Layer.DTOS.Products;
+using Services_Layer.Response_Model;
 using Services_Layer.Services.Country_Services;
 using System;
 using System.Collections.Generic;
@@ -26,7 +27,7 @@ namespace Services_Layer.Services.Branch_Services
 
 
 
-        public List<BranchWithDistributorAndCountry> GetBranches()
+        public GenericResponse<List<BranchWithDistributorAndCountry>>  GetBranches()
         {
             List<Branch> Branch_List = _unitOfWork.Branch_Repo.GetBranchesWithDistributorAndCountry();
 
@@ -37,11 +38,12 @@ namespace Services_Layer.Services.Branch_Services
                 Branch_Dtos.Add(_mapper.Map<BranchWithDistributorAndCountry>(phr));
             }
 
-            return Branch_Dtos;
+
+            return new GenericResponse<List<BranchWithDistributorAndCountry>>() { Data = Branch_Dtos, Message = "Get Branches Successfully" };
         }
 
 
-        public List<BranchWithDistributorAndCountry> FillterByCountry(int country_id)
+        public GenericResponse<List<BranchWithDistributorAndCountry>> FillterByCountry(int country_id)
         {
             List<Branch> Branch_List = _unitOfWork.Branch_Repo.FillterByCountry(country_id);
 
@@ -52,11 +54,11 @@ namespace Services_Layer.Services.Branch_Services
                 Branch_Dtos.Add(_mapper.Map<BranchWithDistributorAndCountry>(phr));
             }
 
-            return Branch_Dtos;
+            return new GenericResponse<List<BranchWithDistributorAndCountry>>() { Data = Branch_Dtos, Message = "Get Branches Successfully" }; 
         }
 
 
-        public List<BranchWithDistributorAndCountry> FillterByDistrbutor(int dis_id)
+        public GenericResponse<List<BranchWithDistributorAndCountry>> FillterByDistrbutor(int dis_id)
         {
             List<Branch> Branch_List = _unitOfWork.Branch_Repo.FillterByDistributor(dis_id);
 
@@ -67,12 +69,12 @@ namespace Services_Layer.Services.Branch_Services
                 Branch_Dtos.Add(_mapper.Map<BranchWithDistributorAndCountry>(phr));
             }
 
-            return Branch_Dtos;
+            return new GenericResponse<List<BranchWithDistributorAndCountry>>() { Data = Branch_Dtos, Message = "Get Branches Successfully" };
         }
 
 
 
-        public List<BranchWithDistributorAndCountry> FillterByCountryAndDistributor(int dis_id,int country_id)
+        public GenericResponse<List<BranchWithDistributorAndCountry>> FillterByCountryAndDistributor(int dis_id,int country_id)
         {
             List<Branch> Branch_List = _unitOfWork.Branch_Repo.FillterByDistributorAndCountry(dis_id, country_id);
 
@@ -83,28 +85,29 @@ namespace Services_Layer.Services.Branch_Services
                 Branch_Dtos.Add(_mapper.Map<BranchWithDistributorAndCountry>(phr));
             }
 
-            return Branch_Dtos;
+            return new GenericResponse<List<BranchWithDistributorAndCountry>>() { Data = Branch_Dtos, Message = "Get Branches Successfully" };
         }
 
 
 
-        public BranchWithDistributorAndCountry? GetByID(int id)
+        public GenericResponse<BranchWithDistributorAndCountry?> GetByID(int id)
         {
             Branch phar = _unitOfWork.Branch_Repo.Get(id);
 
             if (phar != null)
             {
                 BranchWithDistributorAndCountry Branch_Dtos = _mapper.Map<BranchWithDistributorAndCountry>(phar);
-                return Branch_Dtos;
+                GenericResponse<BranchWithDistributorAndCountry?> res = new GenericResponse<BranchWithDistributorAndCountry?>() { Data = Branch_Dtos, Message = "Get Branch Successfully" };
+                return res;
             }
             else
-            { return null; }
+            { return new GenericResponse<BranchWithDistributorAndCountry?>() { Data = null, Message = "Get Branch Successfully" }; }
 
         }
 
 
 
-        public Branch? Add(BranchDTO Branch)
+        public GenericResponse<Branch?> Add(BranchDTO Branch)
         {
             Branch con = _mapper.Map<Branch>(Branch);
             _unitOfWork.Branch_Repo.Insert(con);
@@ -114,23 +117,23 @@ namespace Services_Layer.Services.Branch_Services
 
                 if (savedChanges > 0)
                 {
-                    return con;
+                    return new GenericResponse<Branch?>() { Data = con, Message = "Added Branch Successfully" };
                 }
                 else
                 {
-                    return null;
+                    return new GenericResponse<Branch?>() { Data = null, Message = "Added Branch Failed" };
                 }
             }
             catch (Exception ex)
             {
-                return null;
+                return new GenericResponse<Branch?>() { Data = null, Message = "Added Branch Failed Exception" };
             }
 
         }
 
 
 
-        public bool Update(int id, UpdateBranchDTO Branch)
+        public GenericResponse<bool> Update(int id, UpdateBranchDTO Branch)
         {
             Branch con = _mapper.Map<Branch>(Branch);
 
@@ -138,22 +141,28 @@ namespace Services_Layer.Services.Branch_Services
             {
                 _unitOfWork.Branch_Repo.Update(con);
                 _unitOfWork.Save();
-                return true;
+                var res = new GenericResponse<bool>() { Message = "Updated Branch Successfully", Data = true };
+                return res;
+
             }
-            return false;
+            var response = new GenericResponse<bool>() { Message = "Updated Branch Failed", Data = false };
+            return response;
         }
 
 
-        public bool Remove(int ID)
+        public GenericResponse<bool> Remove(int ID)
         {
             var pro = _unitOfWork.Branch_Repo.Get(ID);
             if (pro != null)
             {
                 _unitOfWork.Branch_Repo.Delete(ID);
                 _unitOfWork.Save();
-                return true;
+                var res = new GenericResponse<bool>() { Message = "Deleted Branch Successfully", Data = true };
+                return res;
+
             }
-            return false;
+            var response = new GenericResponse<bool>() { Message = "Deleted Branch Failed", Data = false };
+            return response;
         }
 
 
