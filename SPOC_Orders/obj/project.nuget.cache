@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "Vdy2c8sfvPRCB6eTAwNaNw+LSUAJTIYBKZgIX7UxY1Fp5Dxpj01MROSzZDrjbAxiVePBib4vMSYo5RmVQ1WESg==",
+  "dgSpecHash": "WSeF9ZumRX6G3lhZEaRYeLaDZrvNpMiH3hJ5IoOm7gPKfvnc6h1WnMylDowucf/ItfTxawoLsZQU9kesGHvUNw==",
   "success": true,
   "projectFilePath": "C:\\Users\\johny\\source\\repos\\SPOC_Orders\\SPOC_Orders\\SPOC_Orders.csproj",
   "expectedPackageFiles": [
@@ -11,6 +11,10 @@
     "C:\\Users\\johny\\.nuget\\packages\\azure.security.keyvault.certificates\\4.1.0\\azure.security.keyvault.certificates.4.1.0.nupkg.sha512",
     "C:\\Users\\johny\\.nuget\\packages\\azure.security.keyvault.secrets\\4.1.0\\azure.security.keyvault.secrets.4.1.0.nupkg.sha512",
     "C:\\Users\\johny\\.nuget\\packages\\bouncycastle.cryptography\\2.2.1\\bouncycastle.cryptography.2.2.1.nupkg.sha512",
+    "C:\\Users\\johny\\.nuget\\packages\\google.apis\\1.62.0\\google.apis.1.62.0.nupkg.sha512",
+    "C:\\Users\\johny\\.nuget\\packages\\google.apis.auth\\1.62.0\\google.apis.auth.1.62.0.nupkg.sha512",
+    "C:\\Users\\johny\\.nuget\\packages\\google.apis.core\\1.62.0\\google.apis.core.1.62.0.nupkg.sha512",
+    "C:\\Users\\johny\\.nuget\\packages\\google.apis.gmail.v1\\1.62.0.3105\\google.apis.gmail.v1.1.62.0.3105.nupkg.sha512",
     "C:\\Users\\johny\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\johny\\.nuget\\packages\\mailkit\\4.2.0\\mailkit.4.2.0.nupkg.sha512",
     "C:\\Users\\johny\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\7.0.10\\microsoft.aspnetcore.authentication.jwtbearer.7.0.10.nupkg.sha512",

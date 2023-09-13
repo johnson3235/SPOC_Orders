@@ -5,6 +5,9 @@ namespace Services_Layer.DTOS.User
     public class RegisiterDTO
     {
         public string userName { get; set; }
+
+      //  public string Name { get; set; }
+        public string Email { get; set; }
         public string Password { get; set; }
 
         [ExistsProperty(ValidationModel.Role)]

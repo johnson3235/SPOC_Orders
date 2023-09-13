@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DB_Layer.Models;
 using Microsoft.AspNetCore.Mvc;
+
 using Repo_Layer.UnitOfWork;
 using Services_Layer.DTOS.Branches;
 using Services_Layer.DTOS.Orders;
@@ -13,18 +14,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Services_Layer.Services.Email_Services;
 
 namespace Services_Layer.Services.Order_Services
 {
     public class OrderServices : Service<Order>, IOrderServices
     {
         private readonly IUnitOFWork _unitOfWork;
+        private readonly IEmailService _email_services;
         private readonly IMapper _mapper;
 
-        public OrderServices(IUnitOFWork _unitofwork, IMapper _mapper) : base(_unitofwork, _mapper)
+        public OrderServices(IUnitOFWork _unitofwork, IMapper _mapper, IEmailService _email_services) : base(_unitofwork, _mapper)
         {
             this._unitOfWork = _unitofwork;
             this._mapper = _mapper;
+            this._email_services = _email_services;
         }
 
 
@@ -94,6 +98,10 @@ namespace Services_Layer.Services.Order_Services
                 
                 if (savedChanges > 0)
                 {
+
+
+                    //_email_services.SendEmail();
+
                     return new GenericResponse<Order?>() { Data = order, Message = "Added Order Successfully" }; 
                 }
                 else

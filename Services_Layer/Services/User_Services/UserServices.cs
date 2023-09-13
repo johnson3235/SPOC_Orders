@@ -107,6 +107,7 @@ namespace Services_Layer.Services.User_Services
         {
             CustomUser appUser = new CustomUser();
             appUser.UserName = newUserDto.userName;
+            appUser.Email = newUserDto.Email;
             appUser.PasswordHash = newUserDto.Password;
             appUser.RoleId = newUserDto.RoleId;
 

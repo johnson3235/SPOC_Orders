@@ -84,7 +84,7 @@ new string[] {}
 
 
 
-            builder.Services.AddDbContext<DataDbContext>(option =>option.UseSqlServer(builder.Configuration.GetConnectionString("server")));
+            builder.Services.AddDbContext<DataDbContext>(option =>option.UseSqlServer(builder.Configuration.GetConnectionString("base")));
 
             ServicePointManager.ServerCertificateValidationCallback = (sender, cert, chain, sslPolicyErrors) => true;
 
@@ -98,29 +98,12 @@ new string[] {}
                 ).AddEntityFrameworkStores<DataDbContext>()
                 .AddDefaultTokenProviders();
 
-            //builder.Services.AddAuthentication(options =>
-            //{
-            //    options.DefaultAuthenticateScheme =
-            //        JwtBearerDefaults.AuthenticationScheme;
-            //    options.DefaultChallengeScheme =
-            //        JwtBearerDefaults.AuthenticationScheme;
-            //    options.DefaultScheme =
-            //        JwtBearerDefaults.AuthenticationScheme;
 
-            //}).AddJwtBearer(options =>
-            //{
-            //    options.SaveToken = true;
-            //    options.RequireHttpsMetadata = false;
-            //    options.TokenValidationParameters = new TokenValidationParameters()
-            //    {
-            //        ValidateIssuer = true,
-            //        ValidateAudience = true,
-            //        ValidIssuer = builder.Configuration["JWT:Issues"],
-            //        ValidAudience = builder.Configuration["JWT:Audiance"],
-            //        IssuerSigningKey = new SymmetricSecurityKey
-            //            (Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]))
-            //    };
-            //});
+
+
+            builder.Services.AddMicrosoftIdentityWebApiAuthentication(builder.Configuration, "AzureAd");
+
+
 
             // Repositries
             builder.Services.AddScoped<IRepository<Country>, Repository<Country>>();
@@ -143,7 +126,8 @@ new string[] {}
             builder.Services.AddScoped<IBranchServices, BranchServices>();
             builder.Services.AddScoped<IOrderServices, OrderServices>();
             builder.Services.AddScoped<IUserServices, UserServices>();
-            builder.Services.AddScoped<IMailService, MailService>();
+          //  builder.Services.AddScoped<IMailService, MailService>();
+            builder.Services.AddScoped<IEmailService, EmailService>();
             builder.Services.AddScoped<IMicrosoftGraphHelper, MicrosoftGraphHelper>();
             
 
@@ -158,8 +142,7 @@ new string[] {}
                 });
             });
 
-            builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
-            builder.Services.AddMicrosoftIdentityWebApiAuthentication(builder.Configuration);
+
 
 
 
@@ -176,18 +159,30 @@ new string[] {}
             //    app.UseSwaggerUI();
             //}
 
-            app.UseRouting();
 
             app.UseCors();
-            app.UseAuthentication();
 
+            app.UseRouting();
+
+            app.UseAuthentication();
             app.UseAuthorization();
 
-            app.MapControllers();
+            //app.UseEndpoints(endpoints =>
+            //{
+
+            //    endpoints.MapControllers();
+            //});
+
+            app.UseEndpoints(endpoints =>
+            {
+                // Define your API routes here.
+                endpoints.MapControllers();
+            });
 
             app.Run();
         }
     }
+
 
 
 }

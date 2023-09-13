@@ -14,6 +14,8 @@ namespace DB_Layer.Models
         public string Name { get; set; }
 
         public string Description { get; set; }
+        [Required]
+        public decimal totalprice { get; set; }
 
         [Required]
         [ForeignKey("CustomUser")]

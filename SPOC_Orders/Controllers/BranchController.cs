@@ -27,7 +27,7 @@ namespace SPOC_Orders.Controllers
 
 
         [HttpGet]
-        //[Authorize]
+       // [Authorize]
         public ActionResult<GenericResponse<List<BranchWithDistributorAndCountry>>> GetBranches()
         {
            var con_list = Branch_services.GetBranches();

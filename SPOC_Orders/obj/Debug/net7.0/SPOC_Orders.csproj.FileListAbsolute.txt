@@ -115,3 +115,8 @@ C:\Users\johny\source\repos\SPOC_Orders\SPOC_Orders\bin\Debug\net7.0\Newtonsoft.
 C:\Users\johny\source\repos\SPOC_Orders\SPOC_Orders\bin\Debug\net7.0\System.Security.Cryptography.Pkcs.dll
 C:\Users\johny\source\repos\SPOC_Orders\SPOC_Orders\bin\Debug\net7.0\System.Security.Cryptography.Xml.dll
 C:\Users\johny\source\repos\SPOC_Orders\SPOC_Orders\bin\Debug\net7.0\runtimes\win\lib\net7.0\System.Security.Cryptography.Pkcs.dll
+C:\Users\johny\source\repos\SPOC_Orders\SPOC_Orders\bin\Debug\net7.0\Google.Apis.dll
+C:\Users\johny\source\repos\SPOC_Orders\SPOC_Orders\bin\Debug\net7.0\Google.Apis.Auth.PlatformServices.dll
+C:\Users\johny\source\repos\SPOC_Orders\SPOC_Orders\bin\Debug\net7.0\Google.Apis.Auth.dll
+C:\Users\johny\source\repos\SPOC_Orders\SPOC_Orders\bin\Debug\net7.0\Google.Apis.Core.dll
+C:\Users\johny\source\repos\SPOC_Orders\SPOC_Orders\bin\Debug\net7.0\Google.Apis.Gmail.v1.dll

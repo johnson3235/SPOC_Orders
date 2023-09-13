@@ -13,14 +13,16 @@ namespace Services_Layer.DTOS.Orders
     public class AddOrderDTO
     {
 
-        
         [Required, MaxLength(255)]
         [UniqueOrderName(ValidationModel.Order, ErrorMessage = "Order name must be unique.")]
         public string Name { get; set; }
 
-        [Required, MaxLength(255),MinLength(3)]
+        [MaxLength(255)]
         public string Description { get; set; }
 
+        [Required]
+        [Range(0.01, double.MaxValue, ErrorMessage = "Price must be a Positive value.")]
+        public decimal totalprice { get; set; }
 
         [ExistsProperty(ValidationModel.Med_Rep)]
         public int MedRepId { get; set; }

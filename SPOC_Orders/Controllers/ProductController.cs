@@ -21,7 +21,7 @@ namespace SPOC_Orders.Controllers
 
 
         [HttpGet]
-        //[Authorize]
+       // [Authorize]
         public ActionResult<GenericResponse<List<Product>>> GetProducts()
         {
             GenericResponse<List<Product>> pro_list = services.GetProducts();
